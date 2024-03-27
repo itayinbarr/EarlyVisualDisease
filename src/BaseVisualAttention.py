@@ -1,3 +1,4 @@
+from VisualAttentionDefinitions import DEFAULT_PARAMETERS
 
 class BaseVisualAttention:
     def __init__(self, parameters=None):
@@ -5,10 +6,10 @@ class BaseVisualAttention:
         Initializes the base visual attention model with default or provided parameters.
         :param parameters: A dictionary containing model parameters.
         """
-        # Load default parameters or merge with provided ones.
-        self.parameters = self.default_parameters()
+        # Load default parameters from VisualAttentionDefinitions.py or merge with provided ones.
+        self.parameters = DEFAULT_PARAMETERS.copy()  # Create a copy of the default parameters
         if parameters:
-            self.parameters.update(parameters)
+            self.parameters.update(parameters)  # Update with any user-provided parameters
 
         # Initialize additional attributes needed for the model.
         self.image = None  # Placeholder for the input image.
@@ -22,17 +23,6 @@ class BaseVisualAttention:
         # Initialization for any other model components.
         self.feature_extractors_initialized = False
 
-    def default_parameters(self):
-        """
-        Defines and returns the default parameters for the saliency model.
-        """
-        return {
-            'intensity_weight': 1.0,   # Default weight for intensity features.
-            'color_weight': 1.0,       # Default weight for color features.
-            'orientation_weight': 1.0, # Default weight for orientation features.
-            'scale_levels': [1, 2, 4], # Default scales at which to analyze the image.
-        }
-    
     def compute_saliency(self, image):
         """
         Computes the saliency map for a given image based on the model's parameters.

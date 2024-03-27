@@ -1,4 +1,6 @@
 from VisualAttentionDefinitions import DEFAULT_PARAMETERS
+import cv2
+import numpy as np
 
 class BaseVisualAttention:
     def __init__(self, parameters=None):
@@ -55,41 +57,73 @@ class BaseVisualAttention:
     
     def preprocess_image(self, image):
         """
-        Placeholder for image preprocessing steps, if necessary.
+        Preprocesses the image before feature extraction.
+        This might include converting to a different color space, resizing, or blurring.
         """
-        # For now, simply return the original image.
-        return image
+        # Convert the image to the RGB color space (if it's not already).
+        preprocessed_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        
+        # Resize the image if necessary (you can define the desired size in VisualAttentionDefinitions).
+        desired_size = self.parameters.get('image_size', (640, 480))
+        preprocessed_image = cv2.resize(preprocessed_image, desired_size)
+        
+        # Apply a Gaussian blur for noise reduction (if needed).
+        kernel_size = self.parameters.get('gaussian_kernel', (5, 5))
+        preprocessed_image = cv2.GaussianBlur(preprocessed_image, kernel_size, 0)
+
+        return preprocessed_image
 
     def extract_intensity_features(self, image):
         """
-        Placeholder for method to extract intensity features from an image.
+        Extracts intensity features from an image.
         """
-        pass  # To be implemented
+        # Convert to grayscale as a simple proxy for intensity.
+        grayscale = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        # Further processing could be applied here.
+        return grayscale
 
     def extract_color_features(self, image):
         """
-        Placeholder for method to extract color features from an image.
+        Extracts color features from an image.
         """
-        pass  # To be implemented
+        # Split the image into its RGB components.
+        R, G, B = cv2.split(image)
+        # Further color processing could be applied here.
+        # For now, just return the raw channels.
+        return R, G, B
 
     def extract_orientation_features(self, image):
         """
-        Placeholder for method to extract orientation features from an image.
+        Extracts orientation features from an image.
         """
-        pass  # To be implemented
+        # Convert to grayscale to prepare for edge detection.
+        grayscale = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        # Use Sobel operators to extract horizontal and vertical edges.
+        sobelx = cv2.Sobel(grayscale, cv2.CV_64F, 1, 0, ksize=5)  # Horizontal edges
+        sobely = cv2.Sobel(grayscale, cv2.CV_64F, 0, 1, ksize=5)  # Vertical edges
+        # Combine the edge responses into a single feature map (could use magnitude, direction, etc.).
+        orientation_features = cv2.magnitude(sobelx, sobely)
+        return orientation_features
 
     def combine_feature_maps(self, intensity_features, color_features, orientation_features):
         """
-        Placeholder for method to combine different feature maps into a single saliency map.
+        Combines different feature maps into a single saliency map.
         """
-        pass  # To be implemented
+        # For simplicity, just average the feature maps.
+        # You might need a more sophisticated combination based on your model's theory.
+        combined_saliency = np.mean(np.array([intensity_features, *color_features, orientation_features]), axis=0)
+        return combined_saliency
 
     def postprocess_saliency_map(self, saliency_map):
         """
-        Placeholder for saliency map post-processing steps, such as normalization and smoothing.
+        Post-processes the saliency map, such as normalization and smoothing.
         """
-        # For now, simply return the unmodified saliency map.
-        return saliency_map
+        # Normalize the saliency map to range between 0 and 1.
+        normalized_saliency = cv2.normalize(saliency_map, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
+        # Apply a Gaussian blur for smoothing (if needed).
+        kernel_size = self.parameters.get('smoothing_kernel', (3, 3))
+        smoothed_saliency = cv2.GaussianBlur(normalized_saliency, kernel_size, 0)
+        return smoothed_saliency
 
     
 

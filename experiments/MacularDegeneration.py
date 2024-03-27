@@ -1,13 +1,13 @@
 import os
 import cv2
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..')) 
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from base_model.DiseaseModel import DiseaseModel
 
 # Define the theoretical and empirical weights for Macular Degeneration.
 THEORETICAL_WEIGHTS = {
-    'intensity_weight': 0.9,  # Hypothetical value, adjust based on research
+    'intensity_weight': 1,  # Hypothetical value, adjust based on research
     'color_weight': 0.9,      # Hypothetical value, adjust based on research
     'orientation_weight': 0.9, # Hypothetical value, adjust based on research
 }
@@ -15,7 +15,7 @@ THEORETICAL_WEIGHTS = {
 EMPIRICAL_WEIGHTS = {
     'intensity_weight': 0.1, # Hypothetical value, adjust based on experimental findings
     'color_weight': 0.1,     # Hypothetical value, adjust based on experimental findings
-    'orientation_weight': 0.1, # Hypothetical value, adjust based on experimental findings
+    'orientation_weight': 0.4, # Hypothetical value, adjust based on experimental findings
 }
 
 class MacularDegenerationModel(DiseaseModel):
@@ -29,31 +29,17 @@ def run_macular_degeneration_experiment(image_path, output_dir='results/MacularD
     :param image_path: Path to the image file to process.
     :param output_dir: Directory where the experiment results will be saved.
     """
-    # Ensure the output directory exists.
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
     # Load the image.
     image = cv2.imread(image_path)
     if image is None:
         raise FileNotFoundError(f"Image not found: {image_path}")
 
-    # Initialize the Macular Degeneration model.
+    # Extract the image name.
+    image_name = os.path.basename(image_path)
+
+    # Initialize the Macular Degeneration model and run the experiment.
     md_model = MacularDegenerationModel()
-
-    # Run the experiment with theoretical weights.
-    md_model.set_active_weights('theoretical')
-    theoretical_saliency = md_model.compute_saliency(image)
-    theoretical_output_path = os.path.join(output_dir, 'theoretical_saliency.png')
-    cv2.imwrite(theoretical_output_path, theoretical_saliency * 255)  # Convert to 8-bit image format
-
-    # Run the experiment with empirical weights.
-    md_model.set_active_weights('empirical')
-    empirical_saliency = md_model.compute_saliency(image)
-    empirical_output_path = os.path.join(output_dir, 'empirical_saliency.png')
-    cv2.imwrite(empirical_output_path, empirical_saliency * 255)  # Convert to 8-bit image format
-
-    print(f"Experiment completed successfully. Results saved to {output_dir}")
+    md_model.run_full_experiment(image, 'MacularDegeneration', image_name)
 
 # If this script is run directly, ask for an image path and output directory, then run the experiment.
 if __name__ == "__main__":

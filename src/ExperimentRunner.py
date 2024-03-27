@@ -35,7 +35,7 @@ def run_all_experiments(image_directory, results_directory):
     # Each experiment should be a tuple consisting of (experiment_function, disease_name).
     experiments = [
         (run_macular_degeneration_experiment, 'MacularDegeneration'),
-        (run_control_experiment, 'ControlModel')
+        # (run_control_experiment, 'ControlModel')
     ]
     logger.info(f"Defined {len(experiments)} experiments to run")
 
@@ -45,7 +45,6 @@ def run_all_experiments(image_directory, results_directory):
         for experiment_function, disease_name in experiments:
             logger.info(f"Running {disease_name} experiment on {image_path}")
             output_dir = os.path.join(results_directory, disease_name, datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-            os.makedirs(output_dir)
             logger.info(f"Created output directory for experiment: {output_dir}")
             experiment_function(image_path, output_dir)
             logger.info(f"Completed {disease_name} experiment on {image_path}")

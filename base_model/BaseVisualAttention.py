@@ -1,4 +1,4 @@
-from VisualAttentionDefinitions import DEFAULT_PARAMETERS, IMAGE_SIZE, GAUSSIAN_BLUR_KERNEL_SIZE
+from base_model.VisualAttentionDefinitions import DEFAULT_PARAMETERS, IMAGE_SIZE, GAUSSIAN_BLUR_KERNEL_SIZE
 import cv2
 import numpy as np
 
@@ -78,5 +78,8 @@ class BaseVisualAttention:
         Applies post-processing steps to the combined saliency map.
         """
         normalized_saliency = cv2.normalize(saliency_map, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
-        smoothed_saliency = cv2.GaussianBlur(normalized_saliency, (self.parameters['smoothing_kernel_size'], self.parameters['smoothing_kernel_size']), 0)
+        # Provide a default value for smoothing_kernel_size if it's not specified
+        kernel_size = self.parameters.get('smoothing_kernel_size', 5)  # Use 5 as a default value
+        smoothed_saliency = cv2.GaussianBlur(normalized_saliency, (kernel_size, kernel_size), 0)
         return smoothed_saliency
+

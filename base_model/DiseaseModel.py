@@ -3,10 +3,10 @@ import os
 
 import cv2
 import numpy as np
-from BaseVisualAttention import BaseVisualAttention
+from base_model.BaseVisualAttention import BaseVisualAttention
 
 class DiseaseModel(BaseVisualAttention):
-    def __init__(self, theoretical_weights, empirical_weights, parameters=None):
+    def __init__(self, theoretical_weights=None, empirical_weights=None, parameters=None):
         """
         Initializes the DiseaseModel with disease-specific parameters.
 
@@ -17,13 +17,13 @@ class DiseaseModel(BaseVisualAttention):
         # Initialize the base class with the provided parameters.
         super().__init__(parameters)
 
-        # Store the disease-specific weights.
-        self.theoretical_weights = theoretical_weights
-        self.empirical_weights = empirical_weights
+        # Use the parent's default parameters if no specific weights are provided.
+        self.theoretical_weights = theoretical_weights if theoretical_weights is not None else self.parameters
+        self.empirical_weights = empirical_weights if empirical_weights is not None else self.parameters
 
         # Choose which set of weights to use for the model.
         # This can be switched between 'theoretical' and 'empirical' based on your experiment's needs.
-        self.active_weight_set = 'theoretical'  # Default to theoretical weights.
+        self.active_weight_set = 'theoretical' 
 
     def set_active_weights(self, weight_type='theoretical'):
         """
@@ -31,15 +31,14 @@ class DiseaseModel(BaseVisualAttention):
 
         :param weight_type: A string indicating which set of weights to use ('theoretical' or 'empirical').
         """
-        if weight_type not in ['theoretical', 'empirical']:
-            raise ValueError("weight_type must be either 'theoretical' or 'empirical'")
-        
-        self.active_weight_set = weight_type
-        # Update the model's parameters based on the active weight set.
         if weight_type == 'theoretical':
-            self.parameters.update(self.theoretical_weights)
+            self.parameters['intensity_weight'] = self.theoretical_weights['intensity_weight']
+            self.parameters['color_weight'] = self.theoretical_weights['color_weight']
+            self.parameters['orientation_weight'] = self.theoretical_weights['orientation_weight']
         else:
-            self.parameters.update(self.empirical_weights)
+            self.parameters['intensity_weight'] = self.empirical_weights['intensity_weight']
+            self.parameters['color_weight'] = self.empirical_weights['color_weight']
+            self.parameters['orientation_weight'] = self.empirical_weights['orientation_weight']
 
     def compute_saliency(self, image):
         """

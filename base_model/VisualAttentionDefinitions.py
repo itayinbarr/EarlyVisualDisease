@@ -8,8 +8,8 @@ DEFAULT_PARAMETERS = {
     'intensity_weight': 1.0,
     'color_weight': 1.0,
     'orientation_weight': 1.0,
-    'scale_levels': [1, 2, 4],  # Example scales at which to analyze the image.
-    # Add other parameters as needed.
+    'scale_levels': [1, 2, 4],
+    'smoothing_kernel_size': 5,  
 }
 
 # Define any global constants used in the model. This could include color spaces,

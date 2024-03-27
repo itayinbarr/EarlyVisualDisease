@@ -1,18 +1,21 @@
 import os
 import cv2
-from DiseaseModel import DiseaseModel
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..')) 
+
+from base_model.DiseaseModel import DiseaseModel
 
 # Define the theoretical and empirical weights for Macular Degeneration.
 THEORETICAL_WEIGHTS = {
-    'intensity_weight': 0.8,  # Hypothetical value, adjust based on research
-    'color_weight': 0.5,      # Hypothetical value, adjust based on research
-    'orientation_weight': 0.7, # Hypothetical value, adjust based on research
+    'intensity_weight': 0.9,  # Hypothetical value, adjust based on research
+    'color_weight': 0.9,      # Hypothetical value, adjust based on research
+    'orientation_weight': 0.9, # Hypothetical value, adjust based on research
 }
 
 EMPIRICAL_WEIGHTS = {
-    'intensity_weight': 0.75, # Hypothetical value, adjust based on experimental findings
-    'color_weight': 0.55,     # Hypothetical value, adjust based on experimental findings
-    'orientation_weight': 0.65, # Hypothetical value, adjust based on experimental findings
+    'intensity_weight': 0.1, # Hypothetical value, adjust based on experimental findings
+    'color_weight': 0.1,     # Hypothetical value, adjust based on experimental findings
+    'orientation_weight': 0.1, # Hypothetical value, adjust based on experimental findings
 }
 
 class MacularDegenerationModel(DiseaseModel):

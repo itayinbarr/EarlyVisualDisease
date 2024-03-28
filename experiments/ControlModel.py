@@ -8,9 +8,9 @@ and provides a function to run the control experiment on a given image.
 import os
 import cv2
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from base_model.DiseaseModel import DiseaseModel
+
 
 # Define the theoretical and empirical weights for the Control Model.
 THEORETICAL_WEIGHTS = {

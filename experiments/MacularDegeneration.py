@@ -9,7 +9,7 @@ Macular Degeneration and provides a function to run the Macular Degeneration exp
 import os
 import cv2
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../src'))
 
 from base_model.DiseaseModel import DiseaseModel
 

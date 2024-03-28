@@ -3,16 +3,17 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
+from base_model.BaseVisualAttention import BaseVisualAttention
+
 # tests/test_base_visual_attention.py
 import unittest
 import cv2
 import numpy as np
-from base_model.BaseVisualAttention import BaseVisualAttention
 
 class TestBaseVisualAttention(unittest.TestCase):
     def setUp(self):
         self.model = BaseVisualAttention()
-        self.image = cv2.imread('./tests/test_image.png')
+        self.image = cv2.imread('./src/tests/test_image.png')
         if self.image is None:
             raise Exception("Failed to load the test image. Please check the file path and ensure the image exists.")
 

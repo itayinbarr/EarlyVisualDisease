@@ -13,14 +13,14 @@ class TestDiseaseModel(unittest.TestCase):
         self.theoretical_weights = {'intensity_weight': 0.5, 'color_weight': 0.3, 'orientation_weight': 0.2}
         self.empirical_weights = {'intensity_weight': 0.4, 'color_weight': 0.4, 'orientation_weight': 0.2}
         self.model = DiseaseModel(self.theoretical_weights, self.empirical_weights)
-        self.image = cv2.imread('tests/test_image.png')
+        self.image = cv2.imread('./src/tests/test_image.png')
 
     def test_initialization(self):
         self.assertEqual(self.model.theoretical_weights, self.theoretical_weights)
         self.assertEqual(self.model.empirical_weights, self.empirical_weights)
 
     def test_run_theoretical_weights(self):
-        self.model.run_theoretical_weights(self.image, 'TestDisease', 'test_image.png')
+        self.model.run_theoretical_weights(self.image, 'TestDisease', './src/tests/test_image.png')
         
         # Get the current timestamp
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

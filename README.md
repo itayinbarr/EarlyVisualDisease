@@ -1,4 +1,4 @@
-# Visual Attention Disease Model Experiments Repository
+# Primary Visual Pathway Diseases Modeling
 
 ## Overview
 

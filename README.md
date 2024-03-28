@@ -1,4 +1,4 @@
-# Early Vision Pathways Disease Modeling
+# Primary Vision Pathways Disease Modeling
 
 ## Background and Motivation
 

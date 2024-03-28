@@ -1,14 +1,13 @@
 
+import unittest
+import cv2
+import numpy as np
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from base_model.BaseVisualAttention import BaseVisualAttention
 
-# tests/test_base_visual_attention.py
-import unittest
-import cv2
-import numpy as np
 
 class TestBaseVisualAttention(unittest.TestCase):
     def setUp(self):

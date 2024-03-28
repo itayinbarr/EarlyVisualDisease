@@ -1,3 +1,10 @@
+"""
+ControlModel.py
+
+This module provides the ControlModel class, which extends the DiseaseModel class to serve as a control model
+for visual attention experiments. It defines the default theoretical and empirical weights for the control model
+and provides a function to run the control experiment on a given image.
+"""
 import os
 import cv2
 import sys
@@ -19,15 +26,24 @@ EMPIRICAL_WEIGHTS = {
 }
 
 class ControlModel(DiseaseModel):
+    """
+    The ControlModel class extends the DiseaseModel class to serve as a control model for visual attention experiments.
+    It uses the default theoretical and empirical weights for the control model.
+    """
     def __init__(self):
+        """
+        Initializes the ControlModel with the default theoretical and empirical weights for the control model.
+        """
         super().__init__(THEORETICAL_WEIGHTS, EMPIRICAL_WEIGHTS)
 
 def run_control_experiment(image_path, output_dir='results/Control'):
     """
     Runs the control experiment on the provided image using default model parameters.
-    
-    :param image_path: Path to the image file to process.
-    :param output_dir: Directory where the experiment results will be saved.
+
+    Args:
+        image_path (str): Path to the image file to process.
+        output_dir (str, optional): Directory where the experiment results will be saved.
+            Defaults to 'results/Control'.
     """
     # Load the image.
     image = cv2.imread(image_path)
@@ -37,15 +53,6 @@ def run_control_experiment(image_path, output_dir='results/Control'):
     # Extract the image name.
     image_name = os.path.basename(image_path)
 
-    # Initialize the Control model and run the experiment.
     control_model = ControlModel()
     control_model.run_full_experiment(image, 'Control', image_name)
 
-# If this script is run directly, ask for an image path and output directory, then run the experiment.
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python ControlModel.py <image_path> [<output_dir>]")
-    else:
-        img_path = sys.argv[1]
-        out_dir = sys.argv[2] if len(sys.argv) > 2 else 'results/Control'
-        run_control_experiment(img_path, out_dir)

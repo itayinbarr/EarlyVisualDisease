@@ -1,3 +1,10 @@
+"""
+ExperimentRunner.py
+
+This module provides functionality to run experiments for all diseases on all images in a specified directory.
+It imports the disease models and defines a function to run all experiments. The module also sets up logging
+to track the progress of the experiments.
+"""
 import os
 import glob
 import sys
@@ -17,18 +24,18 @@ logger = logging.getLogger(__name__)
 def run_all_experiments(image_directory, results_directory):
     """
     Runs experiments for all diseases on all images in the specified directory.
-    :param image_directory: The directory containing the images to process.
-    :param results_directory: The root directory where results will be stored.
+
+    Args:
+        image_directory (str): The directory containing the images to process.
+        results_directory (str): The root directory where results will be stored.
     """
-    # Ensure the results directory exists.
     if not os.path.exists(results_directory):
         os.makedirs(results_directory)
         logger.info(f"Created results directory: {results_directory}")
     else:
         logger.info(f"Results directory already exists: {results_directory}")
 
-    # List all image files in the specified directory.
-    image_paths = glob.glob(os.path.join(image_directory, '*.png'))  # Assuming PNG format; change as necessary.
+    image_paths = glob.glob(os.path.join(image_directory, '*.png'))  
     logger.info(f"Found {len(image_paths)} images in directory: {image_directory}")
 
     # Define the experiments to run.
@@ -39,7 +46,6 @@ def run_all_experiments(image_directory, results_directory):
     ]
     logger.info(f"Defined {len(experiments)} experiments to run")
 
-    # Iterate through each image and each experiment, running the full experiment.
     for image_path in image_paths:
         logger.info(f"Processing image: {image_path}")
         for experiment_function, disease_name in experiments:

@@ -1,3 +1,11 @@
+"""
+MacularDegeneration.py
+
+This module provides the MacularDegenerationModel class, which extends the DiseaseModel class to model
+visual attention for Macular Degeneration. It defines the theoretical and empirical weights specific to
+Macular Degeneration and provides a function to run the Macular Degeneration experiment on a given image.
+"""
+
 import os
 import cv2
 import sys
@@ -19,15 +27,24 @@ EMPIRICAL_WEIGHTS = {
 }
 
 class MacularDegenerationModel(DiseaseModel):
+    """
+    The MacularDegenerationModel class extends the DiseaseModel class to model visual attention for Macular Degeneration.
+    It uses the theoretical and empirical weights specific to Macular Degeneration.
+    """
     def __init__(self):
+        """
+        Initializes the MacularDegenerationModel with the theoretical and empirical weights for Macular Degeneration.
+        """
         super().__init__(THEORETICAL_WEIGHTS, EMPIRICAL_WEIGHTS)
 
 def run_macular_degeneration_experiment(image_path, output_dir='results/MacularDegeneration'):
     """
     Runs the Macular Degeneration experiment on the provided image.
-    
-    :param image_path: Path to the image file to process.
-    :param output_dir: Directory where the experiment results will be saved.
+
+    Args:
+        image_path (str): Path to the image file to process.
+        output_dir (str, optional): Directory where the experiment results will be saved.
+            Defaults to 'results/MacularDegeneration'.
     """
     # Load the image.
     image = cv2.imread(image_path)
@@ -37,16 +54,6 @@ def run_macular_degeneration_experiment(image_path, output_dir='results/MacularD
     # Extract the image name.
     image_name = os.path.basename(image_path)
 
-    # Initialize the Macular Degeneration model and run the experiment.
     md_model = MacularDegenerationModel()
     md_model.run_full_experiment(image, 'MacularDegeneration', image_name)
 
-# If this script is run directly, ask for an image path and output directory, then run the experiment.
-if __name__ == "__main__":
-    import sys
-    if len(sys.argv) < 2:
-        print("Usage: python MacularDegeneration.py <image_path> [<output_dir>]")
-    else:
-        img_path = sys.argv[1]
-        out_dir = sys.argv[2] if len(sys.argv) > 2 else 'results/MacularDegeneration'
-        run_macular_degeneration_experiment(img_path, out_dir)

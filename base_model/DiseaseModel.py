@@ -1,21 +1,39 @@
+"""
+DiseaseModel.py
+
+This module provides the DiseaseModel class, which extends the BaseVisualAttention class to model
+visual attention for specific diseases. It allows for the use of theoretical and empirical weights
+to compute saliency maps and run experiments.
+
+The DiseaseModel class provides methods to set active weights, compute saliency maps, run experiments
+with theoretical and empirical weights, and save the results.
+"""
+
 import datetime
 import os
-from pathlib import Path  # Import Path for easy file name extraction
 import cv2
 import numpy as np
 
 from base_model.BaseVisualAttention import BaseVisualAttention
 
 class DiseaseModel(BaseVisualAttention):
+    """
+    The DiseaseModel class extends the BaseVisualAttention class to model visual attention for specific diseases.
+    It allows for the use of theoretical and empirical weights to compute saliency maps and run experiments.
+
+    Attributes:
+        theoretical_weights (dict): A dictionary containing the theoretical weights based on literature.
+        empirical_weights (dict): A dictionary containing the empirical weights from trial and error.
+    """
     def __init__(self, theoretical_weights=None, empirical_weights=None, parameters=None):
         """
         Initializes the DiseaseModel with disease-specific parameters.
         
-        :param theoretical_weights: A dictionary containing the theoretical weights based on literature.
-        :param empirical_weights: A dictionary containing the empirical weights from trial and error.
-        :param parameters: Additional model parameters, which can override the default settings.
+        Args:
+            theoretical_weights (dict, optional): A dictionary containing the theoretical weights based on literature.
+            empirical_weights (dict, optional): A dictionary containing the empirical weights from trial and error.
+            parameters (dict, optional): Additional model parameters, which can override the default settings.
         """
-        # Initialize the base class with the provided parameters.
         super().__init__(parameters)
 
         # Use the parent's default parameters if no specific weights are provided.
@@ -27,7 +45,9 @@ class DiseaseModel(BaseVisualAttention):
         """
         Sets the active weight set for the model based on the experiment type.
 
-        :param weight_type: A string indicating which set of weights to use ('theoretical' or 'empirical').
+        Args:
+            weight_type (str, optional): A string indicating which set of weights to use ('theoretical' or 'empirical').
+                Defaults to 'theoretical'.
         """
         if weight_type == 'theoretical':
             self.parameters['intensity_weight'] = self.theoretical_weights['intensity_weight']
@@ -39,6 +59,16 @@ class DiseaseModel(BaseVisualAttention):
             self.parameters['orientation_weight'] = self.empirical_weights['orientation_weight']
 
     def compute_saliency(self, image, weights):
+        """
+        Computes the saliency map for the given image using the specified weights.
+
+        Args:
+            image (numpy.ndarray): The input image.
+            weights (dict): The weights to use for computing the saliency map.
+
+        Returns:
+            numpy.ndarray: The computed saliency map.
+        """
         preprocessed_image = self.preprocess_image(image)
         self.intensity_features = self.extract_intensity_features(preprocessed_image)
         self.color_features = self.extract_color_features(preprocessed_image)
@@ -66,13 +96,23 @@ class DiseaseModel(BaseVisualAttention):
     def run_theoretical_weights(self, image, disease_name, image_name):
         """
         Runs the model using the theoretical weights on a given image.
-        """
+
+        Args:
+            image (numpy.ndarray): The input image.
+            disease_name (str): The name of the disease.
+            image_name (str): The name of the image file.
+       """
         saliency_map = self.compute_saliency(image, self.theoretical_weights)
         self.save_results(saliency_map, disease_name, 'theoretical', image_name)
 
     def run_empirical_weights(self, image, disease_name, image_name):
         """
         Runs the model using the empirical weights on a given image.
+
+        Args:
+            image (numpy.ndarray): The input image.
+            disease_name (str): The name of the disease.
+            image_name (str): The name of the image file.
         """
         saliency_map = self.compute_saliency(image, self.empirical_weights)
         self.save_results(saliency_map, disease_name, 'empirical', image_name)
@@ -80,6 +120,11 @@ class DiseaseModel(BaseVisualAttention):
     def run_full_experiment(self, image, disease_name, image_name):
         """
         Runs the full experiment using both sets of weights.
+
+        Args:
+            image (numpy.ndarray): The input image.
+            disease_name (str): The name of the disease.
+            image_name (str): The name of the image file.
         """
         self.run_theoretical_weights(image, disease_name, image_name)
         self.run_empirical_weights(image, disease_name, image_name)
@@ -88,10 +133,14 @@ class DiseaseModel(BaseVisualAttention):
         """
         Saves the results of the experiment in a specified format and as a grayscale photo, including the input image name.
         
-        :param saliency_map: The computed saliency map to save.
-        :param disease_name: The name of the disease for directory structuring.
-        :param weight_type: Specifies whether 'theoretical' or 'empirical' weights were used.
-        :param image_path: The path to the original input image.
+        Args:
+            saliency_map (numpy.ndarray): The computed saliency map to save.
+            disease_name (str): The name of the disease for directory structuring.
+            weight_type (str): Specifies whether 'theoretical' or 'empirical' weights were used.
+            image_name (str): The name of the original input image.
+
+        Returns:
+            str: The path to the directory where the results were saved.
         """
         formatted_image_name = os.path.splitext(os.path.basename(image_name))[0]
         results_dir = f'results/{disease_name}/{weight_type}/{formatted_image_name}/{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'

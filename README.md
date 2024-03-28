@@ -1,61 +1,61 @@
-# Primary Visual Pathway Diseases Modeling
+# Early Vision Pathways Disease Modeling
 
-## Overview
+## Background and Motivation
 
-This repository contains an implementation of a visual attention model based on the Itti-Koch framework. The core functionality revolves around simulating how human vision highlights areas of interest within images, particularly focusing on aspects like intensity, color, and orientation features. The repository is structured to facilitate running experiments with models like ControlModel and MacularDegeneration, among others, using real-world image data.
+The human visual system is a complex network of neural pathways that enable us to perceive and interpret the world around us. Understanding how visual information is processed in the early stages of the visual system is crucial for comprehending the underlying mechanisms of visual perception and the potential impact of various diseases on visual function.
 
-## Getting Started
+Modeling early vision pathways and their associated diseases provides valuable insights into the workings of the visual system and aids in the development of diagnostic tools and treatment strategies. By simulating the behavior of the early visual system under different conditions, we can gain a deeper understanding of how diseases affect visual processing and identify potential interventions to mitigate their impact.
 
-To get started with the repository:
+## Itti-Koch Saliency Model
 
-1. **Clone the Repository**: Clone this repository to your local machine using your preferred method (HTTPS, SSH, GitHub CLI).
+The Itti-Koch saliency model, proposed by Laurent Itti and Christof Koch, is a prominent computational model that closely mimics the features of early primate vision. This model has been widely recognized for its ability to accurately predict human fixation patterns and capture the essential aspects of visual attention.
 
-2. **Environment Setup**: Ensure you have Python installed. While the code is primarily based on Python 3, pay attention to specific dependencies such as OpenCV, NumPy, and SciPy. Install these via pip:
+The Itti-Koch model is particularly well-suited for modeling early vision pathways due to its biologically plausible architecture and its incorporation of key features found in the early stages of visual processing. As stated in the original paper, "The model is based on the biologically plausible architecture proposed by Koch and Ullman (1985), in which early visual features are combined into a single topographical saliency map" (Itti, Koch, & Niebur, 1998).
 
-   ```bash
-   pip install numpy opencv-python scipy
-   ```
+The model consists of several stages that mimic the hierarchical processing of visual information in the primate visual system. It begins by extracting low-level features such as intensity, color, and orientation from the input image. These features are then processed through a series of center-surround operations, which highlight salient regions in the image. The resulting feature maps are normalized and combined into a single saliency map that represents the most visually prominent areas of the image.
 
-3. **Prepare Your Data**: Place your image datasets within the `./data/` directory. The current setup assumes images are in PNG format. Adjust if necessary to match your data format.
+## Base Model and Disease Model
+
+In this project, we have implemented the Itti-Koch saliency model as a base model for modeling early vision pathways. The base model, represented by the `BaseVisualAttention` class, serves as the core functionality of the Itti-Koch model and provides a foundation for extending it to model specific diseases.
+
+The `DiseaseModel` class is derived from the `BaseVisualAttention` class and serves as a template for modeling various diseases that affect early vision pathways. It inherits the basic functionality of the Itti-Koch model and allows for customization and parameterization to simulate the impact of different diseases on visual attention.
+
+The relationship between the base model and the disease model is hierarchical, with the disease model building upon the functionality provided by the base model. This modular architecture enables researchers to easily extend the model to incorporate new diseases by creating subclasses of the `DiseaseModel` class and specifying the relevant parameters and modifications.
 
 ## Running Experiments
 
-The `ExperimentRunner.py` script is the main entry point for running experiments:
+To run experiments of existing diseases using the early vision pathways disease modeling framework, follow these steps:
 
-1. **Basic Usage**: To run the experiments with default settings (using images from `./data/` and saving results in `./results/`), simply execute the script without any arguments:
+1. Create a new disease model by extending the `DiseaseModel` class in a separate file within the `experiments` directory. Specify the theoretical and empirical weights for the disease and implement any necessary modifications to the model.
 
-   ```bash
-   python ExperimentRunner.py
-   ```
+2. Run the `ExperimentRunner.py` script, specifying the directory containing the input images and the desired output directory for the results.
 
-2. **Custom Directories**: To specify custom directories for input images and results:
-   ```bash
-   python ExperimentRunner.py path/to/image_directory path/to/results_directory
-   ```
+The experiment runner will iterate over each image and each disease model, computing the saliency maps and saving the results in the specified output directory.
 
-### What Happens in an Experiment?
+## Adding a New Disease
 
-Each experiment processes images to generate saliency maps based on different disease models or control conditions:
+To add a new disease to the early vision pathways disease modeling framework, follow these steps:
 
-- **Macular Degeneration Experiment**: Analyzes how macular degeneration might affect visual attention on images.
-- **Control Experiment**: (Commented out by default) Can be enabled to compare with a standard or healthy visual attention model.
+1. Create a new file in the `experiments` directory for your disease model (e.g., `GlaucomaModel.py`).
 
-Results for each image and model will be stored in separate directories within the specified results directory, organized by the experiment type and timestamp.
+2. Define the theoretical and empirical weights specific to your disease based on research findings and experimental data.
 
-## Repository Structure
+3. Create a new class that extends the `DiseaseModel` class and implement any necessary modifications or additions to the model to simulate the impact of the disease on visual attention.
 
-- `experiments/`: Contains Python modules for each of the disease models.
-- `data/`: Default directory for storing input images for experiments.
-- `results/`: Default directory where experiment outputs are saved.
+4. Implement a function to run the experiment for your disease model, similar to the existing `run_macular_degeneration_experiment` and `run_control_experiment` functions.
 
-## Modifying Experiments
+5. Update the `ExperimentRunner.py` script to import your newly created disease model and add it to the list of experiments to be run.
 
-You can add or modify experiments by editing the `ExperimentRunner.py` script. Specifically, you can add new models in the `experiments` directory and include them in the `experiments` list within `run_all_experiments` function.
+By following these steps, you can easily integrate new diseases into the framework and conduct experiments to study their impact on early vision pathways.
 
-## Logging
+## Conclusion
 
-The script provides detailed logging for each step of the process. Check the console output to monitor the progress and troubleshoot if necessary.
+Modeling early vision pathways and their associated diseases provides valuable insights into the functioning of the visual system and the potential effects of various disorders on visual perception. The Itti-Koch saliency model serves as a biologically plausible foundation for simulating early visual processing, and the modular architecture of the base model and disease model allows for easy extension and customization to incorporate new diseases.
 
----
+By utilizing this framework, researchers can conduct experiments, generate saliency maps, and analyze the impact of different diseases on visual attention. The results obtained from these experiments can contribute to a better understanding of the underlying mechanisms of visual perception and aid in the development of diagnostic tools and treatment strategies for visual disorders.
 
-By using this repository, you can explore different aspects of visual attention and how various conditions may alter perception within visual scenes.
+## References
+
+Itti, L., Koch, C., & Niebur, E. (1998). A model of saliency-based visual attention for rapid scene analysis. IEEE Transactions on Pattern Analysis and Machine Intelligence, 20(11), 1254-1259.
+
+Koch, C., & Ullman, S. (1985). Shifts in selective visual attention: towards the underlying neural circuitry. Human Neurobiology, 4(4), 219-227.

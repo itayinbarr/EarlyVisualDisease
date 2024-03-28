@@ -1,13 +1,42 @@
+"""
+BaseVisualAttention.py
+
+This module provides the BaseVisualAttention class, which serves as the base class for implementing
+visual attention models. It includes methods for computing saliency maps, extracting features,
+creating conspicuity maps, and applying post-processing techniques.
+
+The BaseVisualAttention class is designed to be extended by specific disease models or other
+visual attention models that require customization of the base functionality.
+"""
+
 import math
-from base_model.VisualAttentionDefinitions import DEFAULT_PARAMETERS, IMAGE_SIZE, GAUSSIAN_BLUR_KERNEL_SIZE
 import cv2
 import numpy as np
 from scipy.ndimage import maximum_filter
 
+from base_model.VisualAttentionDefinitions import DEFAULT_PARAMETERS
+
 class BaseVisualAttention:
+    """
+    The BaseVisualAttention class serves as the base class for implementing visual attention models.
+    It provides methods for computing saliency maps, extracting features, creating conspicuity maps,
+    and applying post-processing techniques.
+
+    Attributes:
+        parameters (dict): A dictionary containing the model parameters.
+        image (numpy.ndarray): The input image.
+        saliency_map (numpy.ndarray): The computed saliency map.
+        intensity_features (list): The extracted intensity features.
+        color_features (list): The extracted color features.
+        orientation_features (list): The extracted orientation features.
+        feature_extractors_initialized (bool): Flag indicating if feature extractors are initialized.
+    """
     def __init__(self, parameters=None):
         """
-        Initializes the base visual attention model with default or provided parameters.
+        Initializes the BaseVisualAttention object with default or provided parameters.
+
+        Args:
+            parameters (dict, optional): A dictionary containing the model parameters. Defaults to None.
         """
         # Load default parameters from VisualAttentionDefinitions.py or merge with provided ones.
         self.parameters = DEFAULT_PARAMETERS.copy()
@@ -23,6 +52,15 @@ class BaseVisualAttention:
         self.feature_extractors_initialized = False
 
     def compute_saliency(self, image):
+        """
+        Computes the saliency map for the given input image.
+
+        Args:
+            image (numpy.ndarray): The input image.
+
+        Returns:
+            numpy.ndarray: The computed saliency map.
+        """
         preprocessed_image = self.preprocess_image(image)
         self.intensity_features = self.extract_intensity_features(preprocessed_image)
         self.color_features = self.extract_color_features(preprocessed_image)
@@ -48,6 +86,16 @@ class BaseVisualAttention:
         return self.saliency_map
 
     def preprocess_image(self, image, start_size=(1983, 1088)):
+        """
+        Preprocesses the input image by resizing, converting color space, and applying Gaussian blur.
+
+        Args:
+            image (numpy.ndarray): The input image.
+            start_size (tuple, optional): The target size for resizing the image. Defaults to (1983, 1088).
+
+        Returns:
+            numpy.ndarray: The preprocessed image.
+        """
         preprocessed_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         preprocessed_image = cv2.resize(preprocessed_image, start_size)
         preprocessed_image = cv2.GaussianBlur(preprocessed_image, (5, 5), 0)
@@ -55,6 +103,16 @@ class BaseVisualAttention:
 
 
     def extract_intensity_features(self, image, levels=9):
+        """
+        Extracts intensity features from the input image using center-surround differences.
+
+        Args:
+            image (numpy.ndarray): The input image.
+            levels (int, optional): The number of levels in the Gaussian pyramid. Defaults to 9.
+
+        Returns:
+            list: The extracted intensity features.
+        """
         grayscale = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         pyramid = self.create_gaussian_pyramid(grayscale, levels)
         intensity_features = []
@@ -66,6 +124,16 @@ class BaseVisualAttention:
         return intensity_features
 
     def extract_color_features(self, image, levels=9):
+        """
+        Extracts color features from the input image using normalized color channels and center-surround differences.
+
+        Args:
+            image (numpy.ndarray): The input image.
+            levels (int, optional): The number of levels in the Gaussian pyramid. Defaults to 9.
+
+        Returns:
+            list: The extracted color features.
+        """
         image = self.makeNormalizedColorChannels(image)
         r, g, b, y = cv2.split(image)
         r_pyramid = self.create_gaussian_pyramid(r, levels)
@@ -93,6 +161,16 @@ class BaseVisualAttention:
         return rg_features + by_features
 
     def match_shapes_and_absdiff(self, arr1, arr2):
+        """
+        Matches the shapes of two arrays and computes the absolute difference between them.
+
+        Args:
+            arr1 (numpy.ndarray): The first input array.
+            arr2 (numpy.ndarray): The second input array.
+
+        Returns:
+            numpy.ndarray: The absolute difference between the matched arrays.
+        """
         if arr1.shape != arr2.shape:
             height, width = max(arr1.shape, arr2.shape)
             arr1 = cv2.resize(arr1, (width, height))
@@ -100,6 +178,17 @@ class BaseVisualAttention:
         return cv2.absdiff(arr1, arr2)
 
     def extract_orientation_features(self, image, levels=9, num_orientations=4):
+        """
+        Extracts orientation features from the input image using Gabor filters.
+
+        Args:
+            image (numpy.ndarray): The input image.
+            levels (int, optional): The number of levels in the Gaussian pyramid. Defaults to 9.
+            num_orientations (int, optional): The number of orientations for Gabor filters. Defaults to 4.
+
+        Returns:
+            list: The extracted orientation features.
+        """
         grayscale = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         pyramid = self.create_gaussian_pyramid(grayscale, levels)
         orientation_features = []
@@ -113,6 +202,20 @@ class BaseVisualAttention:
         return orientation_features
     
     def makeGaborFilter(self, dims, lambd, theta, psi, sigma, gamma):
+        """
+        Creates a Gabor filter kernel with the specified parameters.
+
+        Args:
+            dims (tuple): The dimensions of the Gabor filter kernel.
+            lambd (float): The wavelength of the sinusoidal factor.
+            theta (float): The orientation of the Gabor filter.
+            psi (float): The phase offset.
+            sigma (float): The sigma of the Gaussian envelope.
+            gamma (float): The spatial aspect ratio.
+
+        Returns:
+            function: The Gabor filter function.
+        """
         def xpf(i, j):
             return i * math.cos(theta) + j * math.sin(theta)
         def ypf(i, j):
@@ -133,6 +236,16 @@ class BaseVisualAttention:
         return theFilter
     
     def makeNormalizedColorChannels(self, image, thresholdRatio=10.):
+        """
+        Creates normalized color channels from the input image.
+
+        Args:
+            image (numpy.ndarray): The input image.
+            thresholdRatio (float, optional): The threshold ratio for color channel normalization. Defaults to 10.
+
+        Returns:
+            numpy.ndarray: The normalized color channels.
+        """
         intens = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         threshold = intens.max() / thresholdRatio
         r, g, b = cv2.split(image)
@@ -153,6 +266,15 @@ class BaseVisualAttention:
         return image
 
     def create_conspicuity_map(self, feature_maps):
+        """
+        Creates a conspicuity map by combining the given feature maps.
+
+        Args:
+            feature_maps (list): A list of feature maps.
+
+        Returns:
+            numpy.ndarray: The conspicuity map.
+        """
         conspicuity_map = np.zeros_like(feature_maps[0], dtype=np.float32)
         for fmap in feature_maps:
             resized_fmap = cv2.resize(fmap, (conspicuity_map.shape[1], conspicuity_map.shape[0]))
@@ -161,11 +283,32 @@ class BaseVisualAttention:
         return conspicuity_map
 
     def combine_conspicuity_maps(self, intensity_map, color_map, orientation_map):
+        """
+        Combines the intensity, color, and orientation conspicuity maps into a single saliency map.
+
+        Args:
+            intensity_map (numpy.ndarray): The intensity conspicuity map.
+            color_map (numpy.ndarray): The color conspicuity map.
+            orientation_map (numpy.ndarray): The orientation conspicuity map.
+
+        Returns:
+            numpy.ndarray: The combined saliency map.
+        """
         saliency_map = (intensity_map + color_map + orientation_map) / 3
         saliency_map = cv2.normalize(saliency_map, None, 0, 1, cv2.NORM_MINMAX)
         return saliency_map
 
     def postprocess_saliency_map(self, saliency_map, num_iters=10):
+        """
+        Applies post-processing techniques to the saliency map, such as inhibition of return and smoothing.
+
+        Args:
+            saliency_map (numpy.ndarray): The input saliency map.
+            num_iters (int, optional): The number of iterations for inhibition of return. Defaults to 10.
+
+        Returns:
+            numpy.ndarray: The post-processed saliency map.
+        """
         for _ in range(num_iters):
             winner = np.unravel_index(np.argmax(saliency_map), saliency_map.shape)
             self.apply_inhibition_of_return(saliency_map, winner)
@@ -176,6 +319,16 @@ class BaseVisualAttention:
         return smoothed_saliency
     
     def create_gaussian_pyramid(self, image, levels):
+        """
+        Creates a Gaussian pyramid from the input image.
+
+        Args:
+            image (numpy.ndarray): The input image.
+            levels (int): The number of levels in the Gaussian pyramid.
+
+        Returns:
+            list: The Gaussian pyramid.
+        """
         pyramid = [image]
         for _ in range(levels - 1):
             image = cv2.pyrDown(image)
@@ -183,6 +336,17 @@ class BaseVisualAttention:
         return pyramid
     
     def center_surround_diff(self, pyramid, center_level, surround_level):
+        """
+        Computes the center-surround difference between two levels of a Gaussian pyramid.
+
+        Args:
+            pyramid (list): The Gaussian pyramid.
+            center_level (int): The center level.
+            surround_level (int): The surround level.
+
+        Returns:
+            numpy.ndarray: The center-surround difference.
+        """
         center = pyramid[center_level]
         surround = cv2.pyrUp(pyramid[surround_level])
         
@@ -205,6 +369,15 @@ class BaseVisualAttention:
         return diff
     
     def normalize_feature_maps(self, feature_maps):
+        """
+        Normalizes the given feature maps.
+
+        Args:
+            feature_maps (list): A list of feature maps.
+
+        Returns:
+            list: The normalized feature maps.
+        """
         normalized_maps = []
         for fmap in feature_maps:
             normalized_map = self.N(fmap)
@@ -212,6 +385,15 @@ class BaseVisualAttention:
         return normalized_maps
     
     def N(self, image):
+        """
+        Applies a normalization operation to the input image.
+
+        Args:
+            image (numpy.ndarray): The input image.
+
+        Returns:
+            numpy.ndarray: The normalized image.
+        """
         M = 8.  # an arbitrary global maximum to which the image is scaled.
         image = cv2.convertScaleAbs(image, alpha=M/image.max(), beta=0.)
         w, h = image.shape
@@ -223,6 +405,16 @@ class BaseVisualAttention:
         return image * (M - mbar)**2
 
     def find_local_maxima(self, feature_map, local_max_size):
+        """
+        Finds local maxima in the given feature map.
+
+        Args:
+            feature_map (numpy.ndarray): The feature map.
+            local_max_size (int): The size of the local maxima neighborhood.
+
+        Returns:
+            list: The local maxima.
+        """
         local_max_list = []
         for fm in feature_map:
             fm = np.asarray(fm, dtype=np.float32)
@@ -233,6 +425,16 @@ class BaseVisualAttention:
         return local_max_list
 
     def normalize_map(self, feature_map, local_max_list):
+        """
+        Normalizes the given feature map based on local maxima.
+
+        Args:
+            feature_map (numpy.ndarray): The feature map.
+            local_max_list (list): The list of local maxima.
+
+        Returns:
+            numpy.ndarray: The normalized feature map.
+        """
         fmap_max = np.max(feature_map)
         fmap_avg = np.mean(feature_map)
         
@@ -250,6 +452,15 @@ class BaseVisualAttention:
         return normalized_map
     
     def apply_inhibition_of_return(self, saliency_map, winner_location, inhibition_radius=50, inhibition_strength=0.2):
+        """
+        Applies inhibition of return to the saliency map.
+
+        Args:
+            saliency_map (numpy.ndarray): The saliency map.
+            winner_location (tuple): The location of the winner.
+            inhibition_radius (int, optional): The radius of inhibition. Defaults to 50.
+            inhibition_strength (float, optional): The strength of inhibition. Defaults to 0.2.
+        """
         height, width = saliency_map.shape
         y, x = winner_location
 

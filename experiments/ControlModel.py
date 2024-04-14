@@ -11,18 +11,17 @@ import sys
 
 from base_model.DiseaseModel import DiseaseModel
 
-
-# Define the theoretical and empirical weights for the Control Model.
+# Define the theoretical and empirical weights for Macular Degeneration.
 THEORETICAL_WEIGHTS = {
-    'intensity_weight': 1.0,  # Default value for the control model
-    'color_weight': 1.0,      # Default value for the control model
-    'orientation_weight': 1.0,  # Default value for the control model
+    'intensity_weight': 1,  
+    'color_weight': 1,      
+    'orientation_weight': 1, 
 }
 
 EMPIRICAL_WEIGHTS = {
-    'intensity_weight': 1.0,  # Default value for the control model
-    'color_weight': 1.0,      # Default value for the control model
-    'orientation_weight': 1.0,  # Default value for the control model
+    'intensity_weight': 1, 
+    'color_weight': 1,     
+    'orientation_weight': 1, 
 }
 
 class ControlModel(DiseaseModel):

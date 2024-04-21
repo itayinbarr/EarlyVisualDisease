@@ -146,6 +146,6 @@ class DiseaseModel(BaseVisualAttention):
         results_dir = f'results/{disease_name}/{weight_type}/{formatted_image_name}/{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
         os.makedirs(results_dir, exist_ok=True)
 
-        np.save(os.path.join(results_dir, f'{formatted_image_name}_saliency_map.npy'), saliency_map)
+        np.save(os.path.join(results_dir, 'saliency_map.npy'), saliency_map)
         normalized_saliency = cv2.normalize(saliency_map, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
-        cv2.imwrite(os.path.join(results_dir, f'{formatted_image_name}_saliency_map.png'), normalized_saliency)
+        cv2.imwrite(os.path.join(results_dir, 'saliency_map.png'), normalized_saliency)

@@ -14,6 +14,7 @@ import logging
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 # Import disease models here
+from experiments.Cataracts import run_cataracts_experiment
 from experiments.ControlModel import run_control_experiment
 from experiments.MacularDegeneration import run_macular_degeneration_experiment
 
@@ -41,8 +42,10 @@ def run_all_experiments(image_directory, results_directory):
     # Define the experiments to run.
     # Each experiment should be a tuple consisting of (experiment_function, disease_name).
     experiments = [
-        #(run_control_experiment, 'ControlModel')
+        (run_control_experiment, 'ControlModel'),
         (run_macular_degeneration_experiment, 'MacularDegeneration'),
+        (run_cataracts_experiment, 'Cataract'),
+        
     ]
     logger.info(f"Defined {len(experiments)} experiments to run")
 

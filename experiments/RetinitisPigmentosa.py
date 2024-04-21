@@ -37,7 +37,7 @@ class RetinitisPigmentosaModel(DiseaseModel):
         """
         super().__init__(THEORETICAL_WEIGHTS, EMPIRICAL_WEIGHTS)
 
-def run_cataracts_experiment(image_path, output_dir='results/RetinitisPigmentosa'):
+def run_retinitispigmentosa_experiment(image_path, output_dir='results/RetinitisPigmentosa'):
     """
     Runs the Retinitis Pigmentosa experiment on the provided image.
 

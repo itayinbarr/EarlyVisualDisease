@@ -37,7 +37,7 @@ class GlaucomaModel(DiseaseModel):
         """
         super().__init__(THEORETICAL_WEIGHTS, EMPIRICAL_WEIGHTS)
 
-def run_cataracts_experiment(image_path, output_dir='results/Glaucoma'):
+def run_glaucoma_experiment(image_path, output_dir='results/Glaucoma'):
     """
     Runs the Glaucoma experiment on the provided image.
 

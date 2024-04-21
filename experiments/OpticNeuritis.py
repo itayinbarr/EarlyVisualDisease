@@ -37,7 +37,7 @@ class OpticNeuritisModel(DiseaseModel):
         """
         super().__init__(THEORETICAL_WEIGHTS, EMPIRICAL_WEIGHTS)
 
-def run_cataracts_experiment(image_path, output_dir='results/OpticNeuritis'):
+def run_opticneuritis_experiment(image_path, output_dir='results/OpticNeuritis'):
     """
     Runs the Optic Neuritis experiment on the provided image.
 

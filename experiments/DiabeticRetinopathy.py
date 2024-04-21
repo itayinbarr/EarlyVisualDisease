@@ -37,7 +37,7 @@ class DiabeticRetinopathyModel(DiseaseModel):
         """
         super().__init__(THEORETICAL_WEIGHTS, EMPIRICAL_WEIGHTS)
 
-def run_cataracts_experiment(image_path, output_dir='results/Diabetic Retinopathy'):
+def run_diabeticretinopathy_experiment(image_path, output_dir='results/Diabetic Retinopathy'):
     """
     Runs the Diabetic Retinopathy experiment on the provided image.
 

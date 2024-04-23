@@ -79,19 +79,31 @@ class Analysis:
         for image in images:
             max_similarity = -1
             min_similarity = 1
+            max_diseases = None
+            min_diseases = None
             for i in range(len(diseases)):
                 for j in range(i+1, len(diseases)):
                     similarity = self.calculate_similarity(diseases[i], diseases[j], image)
-                    max_similarity = max(max_similarity, similarity)
-                    min_similarity = min(min_similarity, similarity)
-            similarities.append((image, max_similarity, min_similarity))
+                    if similarity > max_similarity:
+                        max_similarity = similarity
+                        max_diseases = (diseases[i], diseases[j])
+                    if similarity < min_similarity:
+                        min_similarity = similarity
+                        min_diseases = (diseases[i], diseases[j])
+            similarities.append((image, max_similarity, max_diseases, min_similarity, min_diseases))
 
         # Create the plot
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(12, 6))
         x = np.arange(len(images))
         bar_width = 0.35
         ax.bar(x - bar_width/2, [s[1] for s in similarities], bar_width, label='Most Similar')
-        ax.bar(x + bar_width/2, [s[2] for s in similarities], bar_width, label='Least Similar')
+        ax.bar(x + bar_width/2, [s[3] for s in similarities], bar_width, label='Least Similar')
+        
+        # Add disease labels to the bars
+        for i, s in enumerate(similarities):
+            ax.text(i - bar_width/2, s[1] + 0.01, f"{s[2][0]}\n{s[2][1]}", ha='center', va='bottom', fontsize=8, rotation=90)
+            ax.text(i + bar_width/2, s[3] + 0.01, f"{s[4][0]}\n{s[4][1]}", ha='center', va='bottom', fontsize=8, rotation=90)
+        
         ax.set_xticks(x)
         ax.set_xticklabels([s[0] for s in similarities])
         ax.set_ylabel('Similarity')

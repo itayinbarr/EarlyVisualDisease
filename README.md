@@ -5,23 +5,29 @@ This project serves two main purposes:
 1. Modeling early visual diseases by manipulating the weights of intensity, orientation, and color features in a saliency-based visual attention model.
 2. Providing a well-documented and clearly written implementation of the Itti-Koch saliency model in Python.
 
-The model is inspired by the Itti-Koch model, which is based on the neuronal architecture of the early primate visual system. While there are existing implementations of the Itti-Koch model available, this project aims to provide a clean, readable, and well-structured implementation in Python, making it easier for researchers and developers to understand and build upon.
+The model is based on the Itti-Koch model, which is modeling the neuronal architecture of the early primate visual system. While there are existing bad or old implementations of the Itti-Koch model available in Python, this project aims to provide a clean, readable, and well-structured implementation, making it easier for researchers and developers to understand and build upon.
 
 ## Background
 
-Visual attention plays a crucial role in the interpretation of complex scenes by selecting a subset of the available sensory information before further processing. The Itti-Koch model, proposed by Laurent Itti and Christof Koch, is a biologically-plausible computational model of visual attention. It is inspired by the behavior and the neuronal architecture of the early primate visual system.
+Visual attention plays a crucial role in the interpretation of complex scenes by selecting a subset of the available sensory information before further processing. The Itti-Koch model, proposed by Laurent Itti and Christof Koch, is a biologically-plausible computational model of visual attention that draws inspiration from the early visual pathways in the primate brain.
 
-The model consists of several key components:
+The model consists of several key components that mimic the processing stages in the early visual system:
 
-1. **Feature Extraction**: The input image is decomposed into a set of topographic feature maps, including intensity, color, and orientation. These features are extracted using linear center-surround operations akin to visual receptive fields.
+1. **Feature Extraction**: The input image is decomposed into a set of topographic feature maps, including intensity, color, and orientation. These features are extracted using linear center-surround operations akin to visual receptive fields found in the retina, lateral geniculate nucleus (LGN), and primary visual cortex (V1).
 
-2. **Conspicuity Maps**: The feature maps are then combined into three conspicuity maps: intensity, color, and orientation. These maps highlight the most salient regions in each feature dimension.
+   - Intensity features capture local contrast differences in the image, similar to the processing of achromatic information in the magnocellular pathway of the LGN and V1.
+   - Color features are extracted using color-opponent mechanisms, resembling the processing of chromatic information in the parvocellular pathway of the LGN and V1. The model considers red-green and blue-yellow color opponency, which are prevalent in the early visual system.
+   - Orientation features are extracted using Gabor filters at different scales and orientations, mimicking the processing of orientation-selective neurons in V1. These neurons are organized into orientation columns, each responding to a specific range of orientations.
 
-3. **Saliency Map**: The conspicuity maps are integrated into a single topographical saliency map, which represents the conspicuity or saliency at every location in the visual field.
+2. **Conspicuity Maps**: The feature maps are then combined into three conspicuity maps: intensity, color, and orientation. These maps highlight the most salient regions in each feature dimension, similar to the processing in higher-order visual areas such as V2 and V4, where neurons have larger receptive fields and integrate information from multiple feature dimensions.
 
-4. **Attention Guidance**: The saliency map guides the selection of attended locations in the visual field through a winner-take-all neural network.
+3. **Saliency Map**: The conspicuity maps are integrated into a single topographical saliency map, which represents the conspicuity or saliency at every location in the visual field. This integration process is thought to occur in the parietal and frontal cortical areas, where top-down attentional control signals interact with bottom-up saliency information.
 
-The Itti-Koch model provides a biologically-plausible framework for understanding bottom-up visual attention and has been widely used in various applications.
+4. **Attention Guidance**: The saliency map guides the selection of attended locations in the visual field through a winner-take-all (WTA) neural network. The WTA network is inspired by the competitive interactions among neurons in the visual cortex and the superior colliculus, where the most salient location is selected for further processing and attentional allocation.
+
+The Itti-Koch model provides a biologically-plausible framework for understanding bottom-up visual attention and has been widely used in various applications. It captures the key aspects of early visual processing, such as the separation of visual information into different feature channels (intensity, color, and orientation), the hierarchical processing of features, and the integration of feature maps to guide attentional selection.
+
+By incorporating these biologically-inspired components, the model offers insights into how the early visual pathways contribute to the emergence of visual saliency and how attention can be guided by the interplay between bottom-up and top-down processes.
 
 ## Itti-Koch Model Implementation
 

@@ -58,13 +58,13 @@ The project is structured as follows:
 - `src/`: Directory containing the source code.
   - `analysis/`: Directory containing the analysis code.
     - `analysis.py`: Analysis class for calculating similarities and generating plots.
-    - `analysis_launcher.py`: Script to launch the analysis.
   - `base_model/`: Directory containing the base model code.
     - `BaseVisualAttention.py`: Base class for the visual attention model.
     - `DiseaseModel.py`: Disease-specific model class.
     - `VisualAttentionDefinitions.py`: Definitions and parameters for the visual attention model.
-  - `tests/`: Directory containing test files.
-- `ExperimentRunner.py`: Script to run the experiments for all diseases on all images.
+  - `tests/`: Directory containing test scripts.
+  - `analysis_launcher.py`: Script to launch the analysis.
+  - `experiments_launcher.py`: Script to run the experiments for all diseases on all images.
 - `README.md`: Project documentation.
 - `REQUIREMENTS.txt`: List of required dependencies.
 
@@ -90,16 +90,16 @@ pip install -r REQUIREMENTS.txt
 
 ![Alt text](/flowmap.png?raw=true "Logic Flow Chart")
 
-To run the experiments for all diseases on all images, use the `ExperimentRunner.py` script:
+To run the experiments for all diseases on all images, use the `experiments_launcher.py` script:
 
 ```
-python ExperimentRunner.py
+python experiments_launcher.py
 ```
 
 Alternatively, you can pick specific images and results directories of your choosing from the terminal:
 
 ```
-python ExperimentRunner.py <image_directory> <results_directory>
+python experiments_launcher.py <image_directory> <results_directory>
 ```
 
 - `<image_directory>`: Path to the directory containing the input images.
@@ -113,7 +113,7 @@ To add a new disease model, follow these steps:
 2. Define the theoretical and empirical weights for the disease in the model file.
 3. Create a new disease model class extending the `DiseaseModel` class.
 4. Implement the disease-specific experiment function in the model file.
-5. Import the disease model in `ExperimentRunner.py` and add it to the experiments list.
+5. Import the disease model in `experiments_launcher.py` and add it to the experiments list.
 
 ### Running Analysis
 

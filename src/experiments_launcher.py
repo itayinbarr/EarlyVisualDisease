@@ -1,5 +1,5 @@
 """
-ExperimentRunner.py
+experiments_launcher.py
 
 This module provides functionality to run experiments for all diseases on all images in a specified directory.
 It imports the disease models and defines a function to run all experiments. The module also sets up logging

@@ -11,17 +11,16 @@ import sys
 from datetime import datetime
 import logging
 
-from experiments.DiabeticRetinopathy import run_diabeticretinopathy_experiment
-from experiments.Glaucoma import run_glaucoma_experiment
-from experiments.OpticNeuritis import run_opticneuritis_experiment
-from experiments.RetinitisPigmentosa import run_retinitispigmentosa_experiment
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 # Import disease models here
 from experiments.Cataracts import run_cataracts_experiment
 from experiments.ControlModel import run_control_experiment
 from experiments.MacularDegeneration import run_macular_degeneration_experiment
+from experiments.DiabeticRetinopathy import run_diabeticretinopathy_experiment
+from experiments.Glaucoma import run_glaucoma_experiment
+from experiments.OpticNeuritis import run_opticneuritis_experiment
+from experiments.RetinitisPigmentosa import run_retinitispigmentosa_experiment
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

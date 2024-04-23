@@ -19,10 +19,10 @@ def main():
     analysis = Analysis(results_directory)
 
     # Generate the plot for disease output similarity
-    # analysis.plot_disease_similarity()
+    analysis.plot_disease_similarity()
 
     # Generate the plot for weight distance (example for Macular Degeneration)
-    analysis.plot_weight_distance('MacularDegeneration')
+    # analysis.plot_weight_distance('MacularDegeneration')
 
 if __name__ == '__main__':
     main()

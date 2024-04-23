@@ -9,25 +9,25 @@ The model is based on the Itti-Koch model, which is modeling the neuronal archit
 
 ## Background
 
-Visual attention plays a crucial role in the interpretation of complex scenes by selecting a subset of the available sensory information before further processing. The Itti-Koch model, proposed by Laurent Itti and Christof Koch, is a biologically-plausible computational model of visual attention that draws inspiration from the early visual pathways in the primate brain.
+Visual attention plays a crucial role in the interpretation of complex scenes by selecting a subset of the available sensory information before further processing. The Itti-Koch model, proposed by Laurent Itti and Christof Koch, is a biologically-plausible computational model of visual attention that draws inspiration from the early visual pathways in the primate brain [3].
 
 The model consists of several key components that mimic the processing stages in the early visual system:
 
-1. **Feature Extraction**: The input image is decomposed into a set of topographic feature maps, including intensity, color, and orientation. These features are extracted using linear center-surround operations akin to visual receptive fields found in the retina, lateral geniculate nucleus (LGN), and primary visual cortex (V1).
+1. **Feature Extraction**: The input image is decomposed into a set of topographic feature maps, including intensity, color, and orientation. These features are extracted using linear center-surround operations akin to visual receptive fields found in the retina, lateral geniculate nucleus (LGN), and primary visual cortex (V1) [3].
 
-   - Intensity features capture local contrast differences in the image, similar to the processing of achromatic information in the magnocellular pathway of the LGN and V1.
-   - Color features are extracted using color-opponent mechanisms, resembling the processing of chromatic information in the parvocellular pathway of the LGN and V1. The model considers red-green and blue-yellow color opponency, which are prevalent in the early visual system.
-   - Orientation features are extracted using Gabor filters at different scales and orientations, mimicking the processing of orientation-selective neurons in V1. These neurons are organized into orientation columns, each responding to a specific range of orientations.
+   - Intensity features capture local contrast differences in the image, similar to the processing of achromatic information in the magnocellular pathway of the LGN and V1 [6, 7].
+   - Color features are extracted using color-opponent mechanisms, resembling the processing of chromatic information in the parvocellular pathway of the LGN and V1 [6, 7]. The model considers red-green and blue-yellow color opponency, which are prevalent in the early visual system [3].
+   - Orientation features are extracted using Gabor filters at different scales and orientations, mimicking the processing of orientation-selective neurons in V1 [2, 3]. These neurons are organized into orientation columns, each responding to a specific range of orientations [2].
 
-2. **Conspicuity Maps**: The feature maps are then combined into three conspicuity maps: intensity, color, and orientation. These maps highlight the most salient regions in each feature dimension, similar to the processing in higher-order visual areas such as V2 and V4, where neurons have larger receptive fields and integrate information from multiple feature dimensions.
+2. **Conspicuity Maps**: The feature maps are then combined into three conspicuity maps: intensity, color, and orientation. These maps highlight the most salient regions in each feature dimension, similar to the processing in higher-order visual areas such as V2 and V4, where neurons have larger receptive fields and integrate information from multiple feature dimensions [4, 7].
 
-3. **Saliency Map**: The conspicuity maps are integrated into a single topographical saliency map, which represents the conspicuity or saliency at every location in the visual field. This integration process is thought to occur in the parietal and frontal cortical areas, where top-down attentional control signals interact with bottom-up saliency information.
+3. **Saliency Map**: The conspicuity maps are integrated into a single topographical saliency map, which represents the conspicuity or saliency at every location in the visual field [3]. This integration process is thought to occur in the parietal and frontal cortical areas, where top-down attentional control signals interact with bottom-up saliency information [4, 5].
 
-4. **Attention Guidance**: The saliency map guides the selection of attended locations in the visual field through a winner-take-all (WTA) neural network. The WTA network is inspired by the competitive interactions among neurons in the visual cortex and the superior colliculus, where the most salient location is selected for further processing and attentional allocation.
+4. **Attention Guidance**: The saliency map guides the selection of attended locations in the visual field through a winner-take-all (WTA) neural network [3]. The WTA network is inspired by the competitive interactions among neurons in the visual cortex and the superior colliculus, where the most salient location is selected for further processing and attentional allocation [1, 5].
 
-The Itti-Koch model provides a biologically-plausible framework for understanding bottom-up visual attention and has been widely used in various applications. It captures the key aspects of early visual processing, such as the separation of visual information into different feature channels (intensity, color, and orientation), the hierarchical processing of features, and the integration of feature maps to guide attentional selection.
+The Itti-Koch model provides a biologically-plausible framework for understanding bottom-up visual attention and has been widely used in various applications [3]. It captures the key aspects of early visual processing, such as the separation of visual information into different feature channels (intensity, color, and orientation), the hierarchical processing of features, and the integration of feature maps to guide attentional selection [3].
 
-By incorporating these biologically-inspired components, the model offers insights into how the early visual pathways contribute to the emergence of visual saliency and how attention can be guided by the interplay between bottom-up and top-down processes.
+By incorporating these biologically-inspired components, the model offers insights into how the early visual pathways contribute to the emergence of visual saliency and how attention can be guided by the interplay between bottom-up and top-down processes [3, 4].
 
 ## Itti-Koch Model Implementation
 
@@ -142,6 +142,12 @@ Refer to the documentation in the BaseVisualAttention class for more details on 
 
 ## References
 
-- Itti, L., Koch, C., & Niebur, E. (1998). A model of saliency-based visual attention for rapid scene analysis. IEEE Transactions on Pattern Analysis and Machine Intelligence, 20(11), 1254-1259.
+1. Desimone, R., & Duncan, J. (1995). Neural mechanisms of selective visual attention. Annual Review of Neuroscience, 18(1), 193-222.
+2. Hubel, D. H., & Wiesel, T. N. (1977). Ferrier lecture-functional architecture of macaque monkey visual cortex. Proceedings of the Royal Society of London. Series B. Biological Sciences, 198(1130), 1-59.
+3. Itti, L., Koch, C., & Niebur, E. (1998). A model of saliency-based visual attention for rapid scene analysis. IEEE Transactions on Pattern Analysis and Machine Intelligence, 20(11), 1254-1259.
+4. Kastner, S., & Ungerleider, L. G. (2000). Mechanisms of visual attention in the human cortex. Annual Review of Neuroscience, 23(1), 315-341.
+5. Krauzlis, R. J., Lovejoy, L. P., & Zénon, A. (2013). Superior colliculus and visual spatial attention. Annual Review of Neuroscience, 36, 165-182.
+6. Livingstone, M., & Hubel, D. (1988). Segregation of form, color, movement, and depth: Anatomy, physiology, and perception. Science, 240(4853), 740-749.
+7. Merigan, W. H., & Maunsell, J. H. (1993). How parallel are the primate visual pathways? Annual Review of Neuroscience, 16(1), 369-402.
 
 ---

@@ -11,6 +11,11 @@ import sys
 from datetime import datetime
 import logging
 
+from experiments.DiabeticRetinopathy import run_diabeticretinopathy_experiment
+from experiments.Glaucoma import run_glaucoma_experiment
+from experiments.OpticNeuritis import run_opticneuritis_experiment
+from experiments.RetinitisPigmentosa import run_retinitispigmentosa_experiment
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 # Import disease models here
@@ -45,7 +50,10 @@ def run_all_experiments(image_directory, results_directory):
         (run_control_experiment, 'ControlModel'),
         (run_macular_degeneration_experiment, 'MacularDegeneration'),
         (run_cataracts_experiment, 'Cataract'),
-        
+        (run_diabeticretinopathy_experiment, 'DiabeticRetinopathy'),
+        (run_glaucoma_experiment, 'Glaucoma'),
+        (run_opticneuritis_experiment, 'OpticNeuritis'),
+        (run_retinitispigmentosa_experiment, 'RetinitisPigmentosa')
     ]
     logger.info(f"Defined {len(experiments)} experiments to run")
 

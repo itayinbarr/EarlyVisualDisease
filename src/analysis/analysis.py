@@ -93,7 +93,7 @@ class Analysis:
             similarities.append((image, max_similarity, max_diseases, min_similarity, min_diseases))
 
         # Create the plot
-        fig, ax = plt.subplots(figsize=(12, 6))
+        fig, ax = plt.subplots(figsize=(14, 8))
         x = np.arange(len(images))
         bar_width = 0.35
         ax.bar(x - bar_width/2, [s[1] for s in similarities], bar_width, label='Most Similar')
@@ -109,6 +109,9 @@ class Analysis:
         ax.set_ylabel('Similarity')
         ax.set_title('Disease Output Similarity')
         ax.legend()
+
+        # Adjust the bottom margin to make room for the disease labels
+        plt.margins(0.05, 0.3)
 
         plt.tight_layout()
         plt.show()
